@@ -6,8 +6,15 @@ foreach ( $colslist as $i => $col ) {
 		foreach ( $selslist as $k => $sel ) {
 			if ( $col["column"] == $sel["selcol"] ) {
 				$addtab[$i] = $sel["seltable"]." AS t$i";
-				$colstring[$i] = "t$i.".$sel["selname"]." AS ".$col["column"];
-				$wherestring[$i] = $table.".".$col["column"]."=t$i.".$sel["selid"];
+				if ( $col["multiple"] == "yes" ) {
+					// replace %T% with table alias
+					$colstring[$i] = str_replace("%T%", "t$i", "GROUP_CONCAT(".$sel["selname"]." SEPARATOR ', ') AS ".$col["column"]);
+					$wherestring[$i] = $table.".".$col["column"]." LIKE CONCAT('%', t$i.".$sel["selid"].", '%')";
+					$groupby = "GROUP BY $table.".$col["column"];
+				} else {
+					$colstring[$i] = "t$i.".$sel["selname"]." AS ".$col["column"];
+					$wherestring[$i] = $table.".".$col["column"]." = t$i.".$sel["selid"];
+				}
 			}
 		} 
 	} elseif ( $col["input_type"] == "dropedit" ) { break;
@@ -53,7 +60,7 @@ if ( !isset($colorderby) ) { $colorderby = $colslist[0]["column"]; } else { $col
 if ( isset($_POST["column"]) ) { $colorderby = str_replace("::", " ", $_POST["column"]); }
 if ( isset($_POST["sort"]) ) { $colorderby .= " ".$_POST["sort"]; }
 
-$sqlsel_rows = "SELECT $table.id, $fields FROM $table $addtables $wheres ORDER BY ".$colorderby;
+$sqlsel_rows = "SELECT $table.id, $fields FROM $table $addtables $wheres $groupby ORDER BY ".$colorderby;
 //echo $sqlsel_rows;
 
 $result = $conn->query($sqlsel_rows);

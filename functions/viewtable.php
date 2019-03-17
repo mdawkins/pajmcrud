@@ -1,42 +1,26 @@
 <?php
-$addtab = $colstring = $wherestring = [];
 // table row header
 foreach ( $colslist as $i => $col ) {
-	if ( $col["input_type"] == "tableselect" && array_search($col["column"], array_column($selslist, "selcol")) !== null ) {
+	if ( $col["input_type"] == "dropedit" ) { break;
+	} elseif ( $col["input_type"] == "tableselect" && array_search($col["column"], array_column($selslist, "selcol")) !== null ) {
 		foreach ( $selslist as $k => $sel ) {
 			if ( $col["column"] == $sel["selcol"] ) {
-				$addtab[$i] = $sel["seltable"]." AS t$i";
+				$addtables .= ", ".$sel["seltable"]." AS t$i";
 				if ( $col["multiple"] == "yes" ) {
 					// replace %T% with table alias
-					$colstring[$i] = str_replace("%T%", "t$i", "GROUP_CONCAT(".$sel["selname"]." SEPARATOR ', ') AS ".$col["column"]);
-					$wherestring[$i] = $table.".".$col["column"]." LIKE CONCAT('%', t$i.".$sel["selid"].", '%')";
+					$fields .= str_replace("%T%", "t$i", "GROUP_CONCAT(".$sel["selname"]." SEPARATOR ', ') AS ".$col["column"]).",";
+					$wheres .= $table.".".$col["column"]." LIKE CONCAT('%', t$i.".$sel["selid"].", '%') AND ";
 					$groupby = "GROUP BY $table.".$col["column"];
 				} else {
-					$colstring[$i] = "t$i.".$sel["selname"]." AS ".$col["column"];
-					$wherestring[$i] = $table.".".$col["column"]." = t$i.".$sel["selid"];
+					$fields .= "t$i.".$sel["selname"]." AS ".$col["column"].",";
+					$wheres .= $table.".".$col["column"]." = t$i.".$sel["selid"]." AND ";
 				}
 			}
 		} 
-	} elseif ( $col["input_type"] == "dropedit" ) { break;
-	} else { $colstring[$i] = "$table.".$col["column"]; }
-}
-
-// table row information
-foreach ( $colstring as $key => $field ) {
-	$fields .= $field.",";
-}
-$fields = rtrim($fields,",");
-
-if ( !empty($wherestring) ) {
-	$wheres = "WHERE ";
-	foreach ( $wherestring as $key => $where ) {
-		$wheres .= $where." AND ";
-	}
-	$wheres = rtrim(trim($wheres),"AND");
-}
-
-// add in ajax filters wheres here
-foreach ( $colslist as $i => $col ) {
+	} else {
+		$fields .= "$table.".$col["column"].",";
+       	}
+	// add in ajax filters wheres here
 	if ( !empty($_POST[$col["column"]]) ) {
 		${$col["column"]} = implode("','", $_POST[$col["column"]]);
 		if ( $col["filterbox"] == "checkbox" ) { 
@@ -45,19 +29,23 @@ foreach ( $colslist as $i => $col ) {
 		elseif ( $col["filterbox"] == "text" ) {
 			$addwheres .= " AND ".$col["column"]." LIKE '%".${$col["column"]}."%' ";
 		}
-		if ( empty($wheres) ) { $wheres = "WHERE ".ltrim($addwheres, " AND "); }
-		else { $wheres .= $addwheres; }
 	}
 }
 
-foreach ( $addtab as $key => $tab ) {
-	//echo $tab.":";
-	$addtables .= ", ".$tab;
-}
+// clean up of sql variables
+$fields = rtrim($fields,",");
+if ( !empty($wheres) ) {
+	$wheres = "WHERE ".rtrim(trim($wheres),"AND");
+} elseif ( !empty($addwheres) ) {
+	$wheres = "WHERE ".ltrim($addwheres, " AND ");
+} else	$wheres .= $addwheres;
 
-// list All Sources in DB
-if ( !isset($colorderby) ) { $colorderby = $colslist[0]["column"]; } else { $colorderby = str_replace("::", " ", $colorderby); }
-if ( isset($_POST["column"]) ) { $colorderby = str_replace("::", " ", $_POST["column"]); }
+// Column ORDER BY via _POST, variable, or default first Column
+if ( isset($_POST["column"]) ) {
+	$colorderby = str_replace("::", " ", $_POST["column"]);
+} elseif ( isset($colorderby) ) {
+	$colorderby = str_replace("::", " ", $colorderby);
+} else	$colorderby = $colslist[0]["column"];
 if ( isset($_POST["sort"]) ) { $colorderby .= " ".$_POST["sort"]; }
 
 $sqlsel_rows = "SELECT $table.id, $fields FROM $table $addtables $wheres $groupby ORDER BY ".$colorderby;
@@ -105,9 +93,7 @@ if ($result->num_rows > 0) {
 				$row[$col["column"]] = str_replace(";", "/", $row[$col["column"]]);
 				foreach ( $lists[$col["column"]] as $lst ) {
 					$row[$col["column"]] = str_replace($lst["key"], $lst["title"], $row[$col["column"]]);
-					//if ( $lst["key"] == $row[$col["column"]] ) {
-						//$row[$col["column"]] = $lst["title"];
-					//}
+					//if ( $lst["key"] == $row[$col["column"]] ) { $row[$col["column"]] = $lst["title"]; }
 				}
 				$html .= "<td>".$ahrefedit.$row[$col["column"]]."</a></td>\n";
 			} else $html .= "<td>".$ahrefedit.$row[$col["column"]]."</a></td>\n";

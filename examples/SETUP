@@ -1,0 +1,16 @@
+pajmcrud directory and the example directory should be in the same directory or variables and symbolic links will have to be changed.
+Eg. 
+/var/www/html/pajmcrud
+/var/www/html/casetracker
+
+ls -l casetracker/
+casetracker_conf.inc
+../pajmcrud/css
+../pajmcrud/indices/index.php
+../pajmcrud/js
+pages
+../pajmcrud/indices/staging.php
+
+Also, the PAGENAME_conf.inc file should be named the same as the page directory.
+Eg. casetracker_conf.inc
+and the DB variables and pages on the side menu can be determined there.

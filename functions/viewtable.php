@@ -42,10 +42,13 @@ foreach ( $colslist as $i => $col ) {
 				$addwheres .= " AND ".$col["column"]." IN('".${$col["column"]}."') ";
 		}
 		elseif ( $col["filterbox"] == "text" ) {
-			if ( $col["input_type"] == "tableselect" )
-				$addwheres .= " AND ".$searchcol." LIKE '%".${$col["column"]}."%' ";
-			else
+			if ( $col["input_type"] == "tableselect" ) {
+				$addwheres .= " AND $searchcol LIKE '%".${$col["column"]}."%' ";
+			} elseif ( !empty($col["concatval"]) ) {
+				$addwheres .= " AND ".$col["concatval"]." LIKE '%".${$col["column"]}."%' ";
+			} else {
 				$addwheres .= " AND ".$col["column"]." LIKE '%".${$col["column"]}."%' ";
+			}
 		}
 	}
 }

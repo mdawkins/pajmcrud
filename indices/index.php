@@ -21,7 +21,7 @@
 <?php
 if ( !empty($_GET["page"]) ) {
 	// DB connection info
-	include '../pajmcrud/functions/dbconnection.php';
+	require_once '../pajmcrud/functions/dbconnection.php';
 
 	// call page info and arrays
 	include "pages/".$_GET["page"].".php";
@@ -50,27 +50,35 @@ if ( !empty($_GET["page"]) ) {
 		}
 		// table row header
 		foreach ( $colslist as $i => $col ) {
-			echo "<th><span style=\"cursor:pointer;\" id=\"".$col["column"]."::asc\" class=\"colsort\">".$col["title"]."</span></th>\n";
+			$sortstring = "";
+			if ( $col["input_type"] != "pivotjoin" )
+				$sortstring = "id=\"".$col["column"]."::asc\" class=\"colsort\"";
+			echo "<th><span style=\"cursor:pointer;\" $sortstring>".$col["title"]."</span></th>\n";
 		}
-		echo "<th></th>
-	</tr>\n";
+		if ( $showdeletecolumn != "no" ) {
+			echo "<th></th>";
+		}
+		echo "</tr>\n";
 		// here goes table
 		echo "</table>\n";
 		echo "</div>\n";
 	}
 
-	$formtitle = "Add Information";
-	if ( $_GET["action"] == "edit" ) { $formtitle = "Edit Information"; }
-	echo "<button class=\"collapseform\">".$formtitle."</button>
-	<div class=\"rightform\">\n";
-	// right menu form
-	include $funcroot.'addeditform.php';
-	echo "</div>\n";
+	if ( $showaddedit != "no" ) {
+		$formtitle = "Add Information";
+		if ( $_GET["action"] == "edit" ) { $formtitle = "Edit Information"; }
+		echo "<button class=\"collapseform\">".$formtitle."</button>
+		<div class=\"rightform\">\n";
+		// right menu form
+		include $funcroot.'addeditform.php';
+		echo "</div>\n";
+	}
 }
 
 //phpinfo(32);
 // close DB connection
 mysqli_close($conn);
+//mysqli:close($conn);
 
 echo "<script>\n";
 $collapsearray = array( "collapsemenu", "collapseform", "collapsefilter", "collapsesearch");

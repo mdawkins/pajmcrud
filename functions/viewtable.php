@@ -1,4 +1,14 @@
 <?php
+//Pivot Table join variables
+foreach ( $lists["pivcols"] as $key ) {
+	$pivkey = $key["pivkey"];
+	$joinkey = $key["joinkey"];
+	$keyname = $key["keyname"];
+	$jointable = $key["pivtable"];
+	$joinwherekey = $key["wherekey"];
+	$joinwhereval = $key["whereval"];
+}
+
 // table row header
 foreach ( $colslist as $i => $col ) {
 	if ( $col["input_type"] == "dropedit" ) { break;
@@ -23,7 +33,7 @@ foreach ( $colslist as $i => $col ) {
 		} 
 	} elseif ( $col["input_type"] == "pivotjoin" )  {
 		$fields .= "`".$col["column"]."`, ";
-		$ljointables .= "LEFT JOIN\n\t(SELECT $pivkey, GROUP_CONCAT(DISTINCT(CASE WHEN $joinkey = '".$col["key"]."' THEN $joinkeyname END) ORDER BY 1 SEPARATOR ', ') AS '".$col["column"]."' FROM $jointable WHERE $joinwherekey = $joinwhereval AND $joinkey = '".$col["key"]."' GROUP BY $pivkey) AS t".$i." ON $table.id=t$i.$pivkey\n";
+		$ljointables .= "LEFT JOIN\n\t(SELECT $pivkey, GROUP_CONCAT(DISTINCT(CASE WHEN $joinkey = '".$col["key"]."' THEN $keyname END) ORDER BY 1 SEPARATOR ', ') AS '".$col["column"]."' FROM $jointable WHERE $joinwherekey = $joinwhereval AND $joinkey = '".$col["key"]."' GROUP BY $pivkey) AS t".$i." ON $table.id=t$i.$pivkey\n";
 
 	} elseif ( !empty($col["concatval"]) ) {
 		$fields .= $col["concatval"]." AS ".str_replace("%T%", "t$i", $col["column"]).",";
@@ -71,7 +81,7 @@ if ( isset($_POST["column"]) ) {
 } else	$colorderby = $colslist[0]["column"];
 if ( isset($_POST["sort"]) ) { $colorderby .= " ".$_POST["sort"]; }
 
-$sqlsel_rows = "SELECT $table.id, $fields FROM $table $ljointables $wheres $groupby ORDER BY $colorderby";
+$sqlsel_rows = "SELECT $table.id, $fields FROM $table $ljointables $wheres $groupby ORDER BY $colorderby $rowlimit";
 
 $result = $conn->query($sqlsel_rows);
 if ($result->num_rows > 0) {
@@ -122,6 +132,10 @@ if ($result->num_rows > 0) {
 				if ( $row[$col["column"]] == "0000-00-00 00:00:00" ) { $row[$col["column"]] = "--"; 
 				} else { $row[$col["column"]] = date("m/d/Y @ h:i a",strtotime($row[$col["column"]])); }
 				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
+			} elseif ( $col["input_type"] == "currency" ) {
+				if ( $row[$col["column"]] == "0.00" ) { $row[$col["column"]] = "--"; 
+				} else { $row[$col["column"]] = money_format("%(#10n", $row[$col["column"]]); }
+				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
 			} elseif ( $col["input_type"] == "select" ) {
 				$row[$col["column"]] = str_replace(";", "/", $row[$col["column"]]);
 				foreach ( $lists[$col["column"]] as $lst ) {
@@ -129,7 +143,15 @@ if ($result->num_rows > 0) {
 					//if ( $lst["key"] == $row[$col["column"]] ) { $row[$col["column"]] = $lst["title"]; }
 				}
 				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
-			} else $html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
+			} else {
+				$colstring = $row[$col["column"]];
+				if ( isset($col["colwidth"]) && $col["colwidth"] < strlen($colstring) ) {
+					$titlestring = "title=\"$colstring\"";
+					$colstring = substr($colstring, 0, $col["colwidth"] - 2)."...";
+				}
+				$html .= "<td $titlestring>$ahrefedit $colstring $ahrefend</td>\n";
+				unset($titlestring);
+			}
 			$colnum++;
 		}
 		if ( $showdeletecolumn != "no" ) {

@@ -2,6 +2,7 @@
 #pajmcrud directory settings
 $pajmroot = "/var/www/html/pajmcrud/";
 $funcroot = $pajmroot."functions/";
+setlocale(LC_MONETARY, 'en_US');
 
 // define variables list 
 $showrownum = $tdstyle = $rowstyle = $html = $groupby = $addtables = $addwheres = $fields = $return = $showidcolumn = $concatfield = $multiple = $wheres = $selectnested = $selected = $txthtml = $cbhtml = $datastring = $coloderby = $multiple = $selected = $wherestring = "";

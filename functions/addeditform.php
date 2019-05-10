@@ -136,6 +136,7 @@ foreach ( $colslist as $col ) {
 		<td><?php
 	switch ( $col["input_type"] ) {
 		case "text":
+		case "currency":
 		echo "<input type=\"text\" name=\"".$col["column"]."\" id=\"".$col["column"]."\" value=\"".${$col["column"]}."\" >\n";
 		break;
 

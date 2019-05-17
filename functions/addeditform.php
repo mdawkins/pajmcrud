@@ -22,6 +22,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"]) ) {
 	
 	// check for empty inputs from _POST	
 	foreach ( $colslist as $col ) {
+		if ( $col["input_type"] != "noform" ) {
 	
 		// Error Checking for fields
 		if ( empty($_POST[$col["column"]]) && $col["required"] == "yes" && $col["input_type"] != "dropedit" ) {
@@ -59,6 +60,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"]) ) {
 		} else {
 			$sqlupdate_row .= $col["column"].'="'.${$col["column"]}.'", ';
 			$sqlinsert_row_values .= "'".${$col["column"]}."',";	
+		}
 		}
 	}
 	// Build sql queries
@@ -135,6 +137,7 @@ if ( $_GET["action"] == "delete" ) {
 	<tr><th colspan=2><span><?php echo ucfirst(preg_replace("/_/", " ", $_GET["page"]))." Information"; ?></span></th></tr>
 <?php
 foreach ( $colslist as $col ) {
+	if ( $col["input_type"] != "noform" ) {
 ?>
 	<tr>
 		<td><?php echo $col["title"] ?>:</td>
@@ -209,6 +212,7 @@ foreach ( $colslist as $col ) {
 		include $funcroot."ajaxselect.php"; // $jstemplate var
 		echo $jstemplate;
 		unset($selectnested);
+	}
 	}
 }
 ?>

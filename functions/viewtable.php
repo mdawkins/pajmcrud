@@ -35,6 +35,8 @@ foreach ( $colslist as $i => $col ) {
 		$fields .= "`".$col["column"]."`, ";
 		$ljointables .= "LEFT JOIN\n\t(SELECT $pivkey, GROUP_CONCAT(DISTINCT(CASE WHEN $joinkey = '".$col["key"]."' THEN $keyname END) ORDER BY 1 SEPARATOR ', ') AS '".$col["column"]."' FROM $jointable WHERE $joinwherekey = $joinwhereval AND $joinkey = '".$col["key"]."' GROUP BY $pivkey) AS t".$i." ON $table.id=t$i.$pivkey\n";
 
+	} elseif ( $col["input_type"] == "noform" )  {
+		$fields .= $col["colfunc"]." AS ".str_replace("%T%", "t$i", $col["column"]).",";
 	} elseif ( !empty($col["concatval"]) ) {
 		$fields .= $col["concatval"]." AS ".str_replace("%T%", "t$i", $col["column"]).",";
 	} else {

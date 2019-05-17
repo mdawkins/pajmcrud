@@ -125,7 +125,7 @@ if ($result->num_rows > 0) {
 			if ( $col["input_type"] == "dropedit" ) {
 				$html .= "<td><a ".$tdstyle." href='?page=".$col["column"]."&amp;action=edit&amp;id=".$row['id']."&amp;return=".$_GET['page']."'>".$col["title"]."</a></td>\n";
 			} elseif ( $col["input_type"] == "date" ) {
-				if ( $row[$col["column"]] == "0000-00-00" ) { $row[$col["column"]] = "--"; 
+				if ( $row[$col["column"]] == "0000-00-00" || is_null($row[$col["column"]]) ) { $row[$col["column"]] = "--"; 
 				} else { $row[$col["column"]] = date("m/d/Y",strtotime($row[$col["column"]])); }
 				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
 			} elseif ( $col["input_type"] == "datetime" ) {

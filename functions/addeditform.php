@@ -52,9 +52,14 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"]) ) {
 		${$col["column"]} = addslashes(test_input(${$col["column"]}));
 
 		// Recombine queries
-		$sqlupdate_row .= $col["column"].'="'.${$col["column"]}.'", ';
 		$sqlinsert_row .= $col["column"].",";	
-		$sqlinsert_row_values .= "'".${$col["column"]}."',";	
+		if ( empty(${$col["column"]}) ) {
+			$sqlupdate_row .= $col["column"].'=NULL, ';
+			$sqlinsert_row_values .= "NULL,";	
+		} else {
+			$sqlupdate_row .= $col["column"].'="'.${$col["column"]}.'", ';
+			$sqlinsert_row_values .= "'".${$col["column"]}."',";	
+		}
 	}
 	// Build sql queries
 	$sqlupdate_row = rtrim($sqlupdate_row,", ").' where id="'.$_GET['id'].'"';

@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-<?php include "css/pages_css.php"; ?>
+<?php include_once $pajmroot."css/pages_css.php"; ?>
 </style>
 <script type="text/javascript" src="js/jquery-latest.min.js" /></script>
 <script type="text/javascript" src="js/jquery.mask.min.js" /></script>
@@ -12,7 +12,6 @@
 </head>
 <body>
 
-<?php include basename($_SERVER['DOCUMENT_ROOT'])."_conf.inc"; ?>
 <button class="collapsemenu">Page Menu</button>
 <div class="sidenav">
 <?php echo $menuhtml; ?>
@@ -21,7 +20,7 @@
 <?php
 if ( !empty($_GET["page"]) ) {
 	// DB connection info
-	require_once '../pajmcrud/functions/dbconnection.php';
+	require_once $funcroot."dbconnection.php";
 
 	// call page info and arrays
 	include "pages/".$_GET["page"].".php";

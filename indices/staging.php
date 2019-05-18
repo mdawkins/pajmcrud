@@ -1,7 +1,6 @@
 <?php
 // Common functions
-include basename($_SERVER['DOCUMENT_ROOT'])."_conf.inc";
-require_once "../pajmcrud/functions/dbconnection.php";
+require_once $funcroot."dbconnection.php";
 
 if ( !empty($_GET["page"]) ) {
 

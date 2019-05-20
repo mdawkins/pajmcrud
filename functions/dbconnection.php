@@ -4,6 +4,11 @@ $showrownum = $tdstyle = $rowstyle = $html = $groupby = $addtables = $addwheres 
 
 $concatfield = $multiple = $selected = $filterbox = $text = $checkbox = $action = [];
 
+// needed for certain string formatting functions
+// Windows is lacking native support
+if ( strpos($_SERVER["SERVER_SOFTWARE"], "IIS") !== false) {
+	$serv_plat = "IIS";
+}
 
 // Connect to mysql DB	
 // need to be include from a siteinfo config file

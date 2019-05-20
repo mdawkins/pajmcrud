@@ -136,7 +136,12 @@ if ($result->num_rows > 0) {
 				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
 			} elseif ( $col["input_type"] == "currency" ) {
 				if ( $row[$col["column"]] == "0.00" ) { $row[$col["column"]] = "--"; 
-				} else { $row[$col["column"]] = money_format("%(#10n", $row[$col["column"]]); }
+				} else {
+					if ( $serv_plat == "IIS" ) {
+						$row[$col["column"]] = "$".sprintf('%01.2f', $row[$col["column"]]);
+					} else
+						$row[$col["column"]] = money_format("%(#10n", $row[$col["column"]]); 
+				}
 				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
 			} elseif ( $col["input_type"] == "select" ) {
 				$row[$col["column"]] = str_replace(";", "/", $row[$col["column"]]);

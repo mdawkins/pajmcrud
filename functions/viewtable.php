@@ -53,7 +53,7 @@ foreach ( $colslist as $i => $col ) {
 			else
 				$addwheres .= " AND ".$col["column"]." IN('".${$col["column"]}."') ";
 		}
-		elseif ( $col["filterbox"] == "text" ) {
+		elseif ( $col["filterbox"] == "text" && !empty(${$col["column"]}) ) {
 			if ( $col["input_type"] == "tableselect" ) {
 				$addwheres .= " AND $searchcol LIKE '%".${$col["column"]}."%' ";
 			} elseif ( !empty($col["concatval"]) ) {

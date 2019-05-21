@@ -110,6 +110,7 @@ if ($result->num_rows > 0) {
 			}
 		}
 		$html .= "<tr ".$rowstyle." id=\"".$row['id']."\" class=\"vtrow\" >\n";
+		$rowstyle = "";
 		if ( $tabletype != "pivottable" ) {
 			$ahrefedit = "<a ".$tdstyle." href='?page=".$_GET['page']."&amp;action=edit&amp;id=".$row['id']."'>";
 			$ahrefend = "</a>";

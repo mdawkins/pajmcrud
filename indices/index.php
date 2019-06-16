@@ -49,10 +49,12 @@ if ( !empty($_GET["page"]) ) {
 		}
 		// table row header
 		foreach ( $colslist as $i => $col ) {
+			if ( $col["hidecol"] != "yes" ) {
 			$sortstring = "";
 			if ( $col["input_type"] != "pivotjoin" )
 				$sortstring = "id=\"".$col["column"]."::asc\" class=\"colsort\"";
 			echo "<th><span style=\"cursor:pointer;\" $sortstring>".$col["title"]."</span></th>\n";
+			}	
 		}
 		if ( $showdeletecolumn != "no" ) {
 			echo "<th></th>";

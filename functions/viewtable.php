@@ -83,10 +83,18 @@ if ( isset($_POST["column"]) ) {
 } else	$colorderby = $colslist[0]["column"];
 if ( isset($_POST["sort"]) ) { $colorderby .= " ".$_POST["sort"]; }
 
-$sqlsel_rows = "SELECT $table.id, $fields FROM $table $ljointables $wheres $groupby ORDER BY $colorderby $rowlimit";
+if ( isset($rowlimit) && !isset($pagination) ) {
+	$row_limit = "LIMIT $rowlimit";
+}
+
+$sqlsel_rows = "SELECT $table.id, $fields FROM $table $ljointables $wheres $groupby ORDER BY $colorderby $row_limit";
 
 $result = $conn->query($sqlsel_rows);
-if ($result->num_rows > 0) {
+$totalrows = $result->num_rows;
+if ( $pagination == "yes" ) {
+}
+
+if ( $result->num_rows > 0) {
 	$rownum = 0;
         // output data of each row
 	while($row = $result->fetch_assoc()) {
@@ -125,6 +133,7 @@ if ($result->num_rows > 0) {
 			$colnum++;
 		}
 		foreach ($colslist as $col) {
+			if ( $col["hidecol"] != "yes" ) {
 			if ( $col["input_type"] == "dropedit" ) {
 				$html .= "<td><a ".$tdstyle." href='?page=".$col["column"]."&amp;action=edit&amp;id=".$row['id']."&amp;return=".$_GET['page']."'>".$col["title"]."</a></td>\n";
 			} elseif ( $col["input_type"] == "date" ) {
@@ -162,6 +171,7 @@ if ($result->num_rows > 0) {
 			}
 			$colnum++;
 		}
+		}
 		if ( $showdeletecolumn != "no" ) {
 			$html .= "<td><a href='?page=".$_GET['page']."&amp;action=delete&amp;id=".$row['id']."'>Delete</a></td>";
 			$colnum++;
@@ -172,6 +182,6 @@ if ($result->num_rows > 0) {
 else {
 	$html = "<tr><td colspan=4>Empty, Add information</td></tr>\n";
 }
-	//$html .= "<tr><td colspan=$colnum>SQL: $sqlsel_rows</td></tr>\n";
+	//$html .= "<tr><td colspan=$colnum>TR: $totalrows; SQL: $sqlsel_rows</td></tr>\n";
 echo $html;
 ?>

@@ -191,7 +191,6 @@ foreach ( $colslist as $col ) {
 				<option value=\"\">Select a ".$col["title"]."</option>\n";
 			$multisels = explode(";", ${$col["column"]});
 			foreach ( $lists[$col["column"]] as $list ) {
-				//echo $list["key"]."::".$multisel."<br>";
 				if ( array_search($list["key"], $multisels) !== false ) { $selected="selected"; }
 				if ( $list["key"] != "selectparent" ) {
 					echo "\t\t\t\t<option value='".$list["key"]."' $selected >".$list["title"]."</option>\n";

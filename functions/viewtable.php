@@ -167,7 +167,7 @@ if ( $result->num_rows > 0) {
 					$titlestring = "title=\"$colstring\"";
 					$colstring = substr($colstring, 0, 26 - 2)."...";
 				}
-				$html .= "<td $titlestring>$ahrefedit $colstring $ahrefend</td>\n";
+				$html .= "<td $titlestring>$ahrefedit$colstring$ahrefend</td>\n";
 				unset($titlestring);
 			}
 			$colnum++;

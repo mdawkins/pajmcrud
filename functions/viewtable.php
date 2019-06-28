@@ -162,9 +162,10 @@ if ( $result->num_rows > 0) {
 				$html .= "<td>$ahrefedit".$row[$col["column"]]."$ahrefend</td>\n";
 			} else {
 				$colstring = $row[$col["column"]];
-				if ( isset($col["colwidth"]) && $col["colwidth"] < strlen($colstring) ) {
+				// I hardcoded the colwidth number to 26 bc in SCRUD this is done in CSS
+				if ( $col["colwidth"] == "yes" && 26 < strlen($colstring) ) {
 					$titlestring = "title=\"$colstring\"";
-					$colstring = substr($colstring, 0, $col["colwidth"] - 2)."...";
+					$colstring = substr($colstring, 0, 26 - 2)."...";
 				}
 				$html .= "<td $titlestring>$ahrefedit $colstring $ahrefend</td>\n";
 				unset($titlestring);

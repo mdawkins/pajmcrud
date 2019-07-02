@@ -1,6 +1,6 @@
 <?php
 // Common functions
-require_once $funcroot."dbconnection.php";
+require_once "$funcroot/dbconnection.php";
 
 if ( !empty($_GET["page"]) ) {
 
@@ -16,11 +16,11 @@ if ( !empty($_GET["page"]) ) {
 	//if ( !isset($_GET["return"]) && $_GET["action"] != "edit" ) {
 	if ( !isset($_GET["return"]) ) {
 		// main page view table
-		include $funcroot."viewtable.php";
+		include "$funcroot/viewtable.php";
 	//phpinfo(32);
 	} elseif ( $_GET["action"] == "edit" ) {
 		// main page addedit form
-		include $funcroot."addeditform.php";
+		include "$funcroot/addeditform.php";
 	}
 	/*
 <script>

@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-<?php include_once $pajmroot."css/pages_css.php"; ?>
+<?php include_once "$approot/css/pages_css.php"; ?>
 </style>
 <script type="text/javascript" src="js/jquery-latest.min.js" /></script>
 <script type="text/javascript" src="js/jquery.mask.min.js" /></script>
@@ -20,7 +20,7 @@
 <?php
 if ( !empty($_GET["page"]) ) {
 	// DB connection info
-	require_once $funcroot."dbconnection.php";
+	require_once "$funcroot/dbconnection.php";
 
 	// call page info and arrays
 	include "pages/".$_GET["page"].".php";
@@ -33,7 +33,7 @@ if ( !empty($_GET["page"]) ) {
 
 	if ( !isset($_GET["return"]) ) {
 		//filter menu
-		include $funcroot.'filtermenu.php';
+		include "$funcroot/filtermenu.php";
 
 		// main page view table
 		echo "<div class=\"main\">\n";
@@ -71,7 +71,7 @@ if ( !empty($_GET["page"]) ) {
 		echo "<button class=\"collapseform\">".$formtitle."</button>
 		<div class=\"rightform\">\n";
 		// right menu form
-		include $funcroot.'addeditform.php';
+		include "$funcroot/addeditform.php";
 		echo "</div>\n";
 	}
 }

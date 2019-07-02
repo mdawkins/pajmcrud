@@ -26,7 +26,7 @@ $(document).ready(function() {
 		if(parentVAL) {
 			$.ajax({
 				type: 'POST',
-				url: 'staging.php',
+				url: 'data.php',
 				data: \"parselid=\"+parentVAL+\"&selcol={{SELCOL}}&selname={{SELNAME}}&selid={{SELID}}&seltable={{SELTABLE}}&wherekey={{WHEREKEY}}&whereval={{WHEREVAL}}&selunion={{SELUNION}}&parselcol={{PARSELCOL}}&partitle={{PARTITLE}}\",
 				success: function(html){
 					$('#{{SELCOL}}').html(html);

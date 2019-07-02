@@ -15,7 +15,7 @@ foreach ( $colslist as $i => $col ) {
 		}
 		//echo $sqlsel_filterbox."\n";
 		if ( $col["input_type"] == "tableselect" ) {
-			include_once $funcroot.'selecttbllist.php';
+			include_once "$funcroot/selecttbllist.php";
 		}
 		$result = $conn->query($sqlsel_filterbox);
 		if ($result->num_rows > 0) {
@@ -124,7 +124,7 @@ foreach ( $colslist as $i => $col ) {
 $datastring  = rtrim($datastring, ", ");
 ?>
 		$.ajax({
-			url:"staging.php<?php echo $addgetvars ?>",
+			url:"data.php<?php echo $addgetvars ?>",
 			method:"POST",
 			data:{ action:action, column:column, <?php echo $datastring; ?> },
 			success: function(response){

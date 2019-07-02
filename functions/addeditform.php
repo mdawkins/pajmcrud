@@ -183,7 +183,7 @@ foreach ( $colslist as $col ) {
 		break;
 
 		case "tableselect":
-		include_once $funcroot.'selecttbllist.php';
+		include_once "$funcroot/selecttbllist.php";
 		case "select":
 			if ( $col["multiple"] == "yes" ) { $multiple = "multiple"; $size = "size=\"3\""; 
 			} else { unset($multiple); $size = "size=\"1\""; }
@@ -208,7 +208,7 @@ foreach ( $colslist as $col ) {
 	</tr>
 <?php
 	if ( $selectnested == "true" ) {
-		include $funcroot."ajaxselect.php"; // $jstemplate var
+		include "$funcroot/ajaxselect.php"; // $jstemplate var
 		echo $jstemplate;
 		unset($selectnested);
 	}

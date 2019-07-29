@@ -1,11 +1,25 @@
+<?php
+if ( !empty($_GET["page"]) ) {
+	// DB connection info
+	require_once "$funcroot/dbconnection.php";
+
+	// call page info and arrays
+	include "pages/".$_GET["page"].".php";
+}
+?>
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
+<title><?php echo $pagetitle; ?></title>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 <?php include_once "$approot/css/pages_css.php"; ?>
 </style>
-<script type="text/javascript" src="js/jquery-latest.min.js" /></script>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/jquery.mask.min.js" /></script>
 <script type="text/javascript" src="js/mask-config.js" /></script>
 
@@ -19,12 +33,6 @@
 
 <?php
 if ( !empty($_GET["page"]) ) {
-	// DB connection info
-	require_once "$funcroot/dbconnection.php";
-
-	// call page info and arrays
-	include "pages/".$_GET["page"].".php";
-
 	// pass on the correct page
 	$andget = "?";
 	if ( isset($_GET['page']) ) { $page = $andget."page=".$_GET['page']; $andget = "&amp;"; }

@@ -133,7 +133,7 @@ if ( $result->num_rows > 0) {
 			$colnum++;
 		}
 		foreach ($colslist as $col) {
-			if ( $col["hidecol"] != "yes" ) {
+			if ( $col["colview"] != "hide" ) {
 			if ( $col["input_type"] == "dropedit" ) {
 				$html .= "<td><a ".$tdstyle." href='?page=".$col["column"]."&amp;action=edit&amp;id=".$row['id']."&amp;return=".$_GET['page']."'>".$col["title"]."</a></td>\n";
 			} elseif ( $col["input_type"] == "date" ) {
@@ -163,7 +163,7 @@ if ( $result->num_rows > 0) {
 			} else {
 				$colstring = $row[$col["column"]];
 				// I hardcoded the colwidth number to 26 bc in SCRUD this is done in CSS
-				if ( $col["colwidth"] == "yes" && 26 < strlen($colstring) ) {
+				if ( $col["colview"] == "ellipsis" && 26 < strlen($colstring) ) {
 					$titlestring = "title=\"$colstring\"";
 					$colstring = substr($colstring, 0, 26 - 2)."...";
 				}

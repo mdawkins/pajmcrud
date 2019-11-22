@@ -29,41 +29,41 @@ foreach ( $specslist as $sublist ) {
 		foreach ( $value as $vals ) {
 			$splitvals  = explode(",", $vals);	
 			foreach ( $splitvals as $val ) {
-			$val = trim($val);
-			$titleval = str_replace("grad", ", Grading", $val);
-			$titleval = str_replace("permin", ", % Min", $titleval);
-			$titleval = str_replace("permax", ", % Max", $titleval);
-			$titleval = str_replace("min", ", Min", $titleval);
-			$titleval = str_replace("max", ", Max", $titleval);
-			$titleval = str_replace("range", " Range", $titleval);
-			$titleval = str_replace("ratio", " Ratio", $titleval);
-			$titleval = str_replace("minsize", " Min Size", $titleval);
-			$titleval = str_replace("maxsize", " Max Size", $titleval);
-			$titleval = str_replace("_", ".", $titleval);
-			$titleval = str_replace("mm", " mm ", $titleval);
-			$titleval = str_replace("um", " um ", $titleval);
-			$titleval = str_replace("textarea", "", $titleval);
-			$titleval = str_replace("checkbox", "", $titleval);
-			$titleval = str_replace("blank", "", $titleval);
+				$val = trim($val);
+				$titleval = str_replace("grad", ", Grading", $val);
+				$titleval = str_replace("permin", ", % Min", $titleval);
+				$titleval = str_replace("permax", ", % Max", $titleval);
+				$titleval = str_replace("min", ", Min", $titleval);
+				$titleval = str_replace("max", ", Max", $titleval);
+				$titleval = str_replace("range", " Range", $titleval);
+				$titleval = str_replace("ratio", " Ratio", $titleval);
+				$titleval = str_replace("minsize", " Min Size", $titleval);
+				$titleval = str_replace("maxsize", " Max Size", $titleval);
+				$titleval = str_replace("_", ".", $titleval);
+				$titleval = str_replace("mm", " mm ", $titleval);
+				$titleval = str_replace("um", " um ", $titleval);
+				$titleval = str_replace("textarea", "", $titleval);
+				$titleval = str_replace("checkbox", "", $titleval);
+				$titleval = str_replace("blank", "", $titleval);
 
-			$input_type ="text";
-			if ( $key == "grad" ) {
-				$collist = $key."_".$val."_permin; ".$key."_".$val."_permax; ".$key."_".$val."_dev";
-				$input_type ="3text";
-			} else {
-				if ( $val == "textarea" || $val == "checkbox" ) { 
-					$input_type = $val; 
-					unset($val);
+				$input_type ="text";
+				if ( $key == "grad" ) {
+					$collist = $key."_".$val."_permin; ".$key."_".$val."_permax; ".$key."_".$val."_dev";
+					$input_type ="3text";
 				} else {
-					$val = "_$val"; 
+					if ( $val == "textarea" || $val == "checkbox" ) {
+						$input_type = $val;
+						unset($val);
+					} else {
+						$val = "_$val";
+					}
+					$collist = $key.$val;
 				}
-				$collist = $key.$val; 
+				$colslist[$kval] = array( "column" => $collist, "title" => $titlekey.$titleval, "required" => "yes", "input_type" => $input_type );
+				//print_r($colslist[$kval]);
+				//echo "<br>";
+				$kval++;
 			}
-		$colslist[$kval] = array( "column" => $collist, "title" => $titlekey.$titleval, "required" => "yes", "input_type" => $input_type ) ;
-		//print_r($colslist[$kval]);
-		//echo "<br>";
-		$kval++;
-		}
 		}
 	}
 }

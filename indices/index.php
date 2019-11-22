@@ -57,7 +57,7 @@ if ( !empty($_GET["page"]) ) {
 		}
 		// table row header
 		foreach ( $colslist as $i => $col ) {
-			if ( $col["hidecol"] != "yes" ) {
+			if ( $col["colview"] != "hide" ) {
 			$sortstring = "";
 			if ( $col["input_type"] != "pivotjoin" )
 				$sortstring = "id=\"".$col["column"]."::asc\" class=\"colsort\"";
